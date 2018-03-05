@@ -3,6 +3,7 @@
 
 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" version="1.1">
   <defs>
+    <!-- Bevel -->
     <filter style="color-interpolation-filters: sRGB;" id="bevel" width="2.5" x="-0.5" height="1.5" y="-0.5">
       <feMorphology radius="25" in="SourceAlpha" result="bevel-alpha" />
       <feComposite operator="out" in="SourceGraphic" in2="bevel-alpha" result="alpha-graphic-composite"/>
@@ -14,6 +15,8 @@
       <feComposite operator="in" in="lighted-graphic-composite" in2="SourceAlpha" />
     </filter>
   </defs>
+  <path fill="none" stroke="#000" stroke-width="7.5" transform="translate(12, 5)"
+  d="M4,12 a8.5,8,0,1,1,17,0 q0,4,-4,6 t-4.5,4.5 t-.4,4 v.2 m0,3 v7" />
   <path fill="none" stroke="#FF0" stroke-width="7" filter="url(#bevel)" transform="translate(12, 5)"
   d="M4,12 a8.5,8,0,1,1,17,0 q0,4,-4,6 t-4.5,4.5 t-.4,4 v.2 m0,3 v7" />
 </svg>
