@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Modified from https://commons.wikimedia.org/wiki/File:Orange_question.svg -->
+<!-- Build via inkscape --export-png=nuvola/dropdown/maybe.png --export-background-opacity=0 --without-gui nuvola-dropdown-maybe.svg -->
 
 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" version="1.1">
   <defs>
@@ -15,8 +16,8 @@
       <feComposite operator="in" in="lighted-graphic-composite" in2="SourceAlpha" />
     </filter>
   </defs>
-  <path fill="none" stroke="#000" stroke-width="7.5" transform="translate(12, 5)"
+  <path fill="none" stroke="#000" stroke-width="8" transform="translate(12, 5)"
   d="M4,12 a8.5,8,0,1,1,17,0 q0,4,-4,6 t-4.5,4.5 t-.4,4 v.2 m0,3 v7" />
-  <path fill="none" stroke="#FF0" stroke-width="7" filter="url(#bevel)" transform="translate(12, 5)"
+  <path fill="none" stroke="#cc0" stroke-width="7" transform="translate(12, 5)"
   d="M4,12 a8.5,8,0,1,1,17,0 q0,4,-4,6 t-4.5,4.5 t-.4,4 v.2 m0,3 v7" />
 </svg>
