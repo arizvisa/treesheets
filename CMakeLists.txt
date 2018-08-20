@@ -46,5 +46,6 @@ add_executable(treesheets ${sources})
 
 target_link_libraries(treesheets PRIVATE ${wxWidgets_LIBRARIES})
 
-install(TARGETS treesheets DESTINATION .)
-install(DIRECTORY TS/ DESTINATION .)
+install(TARGETS treesheets DESTINATION bin)
+install(FILES treesheets.desktop DESTINATION share/applications)
+install(DIRECTORY TS/ DESTINATION share/treesheets)
