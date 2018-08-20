@@ -2,22 +2,30 @@
 <!-- Modified from https://commons.wikimedia.org/wiki/File:Orange_question.svg -->
 <!-- Build via inkscape -export-png=nuvola/dropdown/maybe.png -export-background-opacity=0 -without-gui nuvola-dropdown-maybe.svg -->
 
-<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" version="1.1">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" version="1.1">
   <defs>
-    <!-- Bevel -->
-    <filter style="color-interpolation-filters: sRGB;" id="bevel" width="2.5" x="-0.5" height="2.5" y="-0.5">
-      <feMorphology radius="25" in="SourceAlpha" result="bevel-alpha" />
-      <feComposite operator="out" in="SourceGraphic" in2="bevel-alpha" result="alpha-graphic-composite"/>
-      <feGaussianBlur stdDeviation="1.0" in="alpha-graphic-composite" result="blurred" />
-      <feDiffuseLighting diffuseConstant="1.25" surfaceScale="1.0" in="blurred" result="lighted">
-        <feDistantLight elevation="50" azimuth="315" />
-      </feDiffuseLighting>
-      <feBlend mode="multiply" in="SourceGraphic" in2="lighted" result="lighted-graphic-composite" />
-      <feComposite operator="in" in="lighted-graphic-composite" in2="SourceAlpha" />
-    </filter>
+    <linearGradient id="shineGradientSteps">
+      <stop style="stop-color:#ff0" offset="0" />
+      <stop style="stop-color:#fff" offset="1" />
+    </linearGradient>
+    <linearGradient id="shineGradient" xlink:href="#shineGradientSteps"
+       x1="-2.3" y1="25.3" x2="-2.3" y2="14.7"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.2,0,0,0.5,28.0,1.7)" />
   </defs>
-  <path fill="none" stroke="#660" stroke-width="9.0" transform="translate(12, 5)"
-  d="M4,12.5 a8.5,8,0,1,1,17,0 q0,4,-4,6 t-4.5,4.5 t-.4,4 v.2 m0,2 v8" />
-  <path fill="none" stroke="#ff0" stroke-width="7" filter="url(#bevel)" transform="translate(12, 5)"
-  d="M4,12 a8.5,8,0,1,1,17,0 q0,4,-4,6 t-4.5,4.5 t-.4,4 v.2 m0,3 v7" />
+  <path id="shadow"
+    fill="none" stroke="#666" stroke-width="8.5"
+    transform="translate(12,5)"
+    d="m4,12.8 c-7.2e-4,-4.4 3.8,-8.3 8.5,-8.3 4.7,0 8.5,3.6 8.5,8.0 0,2.666666 -1.333333,4.666666 -4,6 -2.666666,1.333333 -4.166666,2.833333 -4.5,4.5 -0.333333,1.666666 -0.466666,3 -0.4,4 v0.4 m0,1.6 v8.5" />
+  <path id="outline"
+    fill="none" stroke="#bb0" stroke-width="7.5"
+    transform="translate(12,5)"
+    d="m4,12.5 a 8.5,8 0 1 1 17,0 q 0,4 -4,6 -4,2 -4.5,4.5 -0.5,2.5 -0.4,4 v0.2 m0,2 v8" />
+  <path id="primary-mark"
+    fill="none" stroke="#ff0" stroke-width="7.0"
+    transform="translate(12,5)"
+    d="m4,12 a 8.5,8 0 1 1 17,0 q 0,4 -4,6 -4,2 -4.5,4.5 -0.5,2.5 -0.4,4 v0.2 m0,3 v7" />
+  <ellipse id="shine"
+    fill="url(#shineGradient)" stroke-width="5.2"
+    cx="24.5" cy="9.0" rx="7.2" ry="3.4" />
 </svg>
