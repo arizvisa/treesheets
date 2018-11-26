@@ -1,3 +1,5 @@
+#include "config.h"
+
 struct MyFrame : wxFrame {
     typedef std::vector<std::pair<wxString, wxString>> MenuString;
     typedef MenuString::iterator MenuStringIterator;
@@ -23,6 +25,12 @@ struct MyFrame : wxFrame {
     std::vector<std::string> scripts_in_menu;
 
     wxString GetPath(const wxString &relpath) {
+        #ifdef __WXGTK__
+            return wxString(PATH_SHARED_DATA) + "/" + relpath;
+        #elif __WXMAC__
+            int cut = exepath_.Find("/MacOS");
+            if (cut > 0) { exepath_ = exepath_.SubString(0, cut) + "/Resources"; }
+        #endif
         if (!exepath_.Length()) return relpath;
         return exepath_ + "/" + relpath;
     }
@@ -62,10 +70,6 @@ struct MyFrame : wxFrame {
         sys->frame = this;
 
         exepath_ = wxFileName(exename).GetPath();
-        #ifdef __WXMAC__
-        int cut = exepath_.Find("/MacOS");
-        if (cut > 0) { exepath_ = exepath_.SubString(0, cut) + "/Resources"; }
-        #endif
 
         class MyLog : public wxLog {
             void DoLogString(const wxChar *msg, time_t timestamp) { DoLogText(*msg); }

@@ -1,0 +1,8 @@
+#ifndef __config_h
+#define __config_h
+
+#cmakedefine PATH_PREFIX L"@prefix@"
+#cmakedefine PATH_BIN L"@install_bin@"
+#cmakedefine PATH_SHARED_DATA L"@install_shared_data@"
+
+#endif
