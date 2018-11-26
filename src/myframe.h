@@ -26,7 +26,7 @@ struct MyFrame : wxFrame {
 
     wxString GetPath(const wxString &relpath) {
         #ifdef __WXGTK__
-            return wxString(PATH_SHARED_DATA) + "/" + relpath;
+            return wxString(PATH_PREFIX) + "/" + wxString(PATH_SHARED_DATA) + "/" + relpath;
         #elif __WXMAC__
             int cut = exepath_.Find("/MacOS");
             if (cut > 0) { exepath_ = exepath_.SubString(0, cut) + "/Resources"; }
