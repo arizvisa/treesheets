@@ -1,3 +1,4 @@
+#include "config.h"
 
 struct IPCServer : wxServer {
     wxConnectionBase *OnAcceptConnection(const wxString &topic) {
@@ -17,11 +18,11 @@ struct MyApp : wxApp {
 
     void AddTranslation(const wxString &basepath) {
         #ifdef __WXGTK__
-            locale.AddCatalogLookupPathPrefix(L"/usr");
-            locale.AddCatalogLookupPathPrefix(L"/usr/local");
+            locale.AddCatalogLookupPathPrefix(wxString(PATH_SHARED_DATA) + "/translations");
             #ifdef LOCALEDIR
                 locale.AddCatalogLookupPathPrefix(LOCALEDIR);
             #endif
+        #else
             wxString prefix = wxStandardPaths::Get().GetInstallPrefix();
             locale.AddCatalogLookupPathPrefix(prefix);
         #endif

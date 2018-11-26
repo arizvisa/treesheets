@@ -1,3 +1,5 @@
+#include "config.h"
+
 struct MyFrame : wxFrame {
     wxString exepath_;
     MyApp *app;
@@ -59,6 +61,17 @@ struct MyFrame : wxFrame {
         return wxString(relativePath.c_str());
     }
 
+    wxString GetPath(const wxString &relpath) {
+        #ifdef __WXGTK__
+            return wxString(PATH_SHARED_DATA) + "/" + relpath;
+        #elif __WXMAC__
+            int cut = exepath_.Find("/MacOS");
+            if (cut > 0) { exepath_ = exepath_.SubString(0, cut) + "/Resources"; }
+        #endif
+        if (!exepath_.Length()) return relpath;
+        return exepath_ + "/" + relpath;
+    }
+
     std::map<wxString, wxString> menustrings;
 
     void MyAppend(wxMenu *menu, int tag, const wxString &contents, const wchar_t *help = L"") {
@@ -82,10 +95,6 @@ struct MyFrame : wxFrame {
           app(_app) {
         sys->frame = this;
         exepath_ = wxFileName(exename).GetPath();
-        #ifdef __WXMAC__
-        int cut = exepath_.Find("/MacOS");
-        if (cut > 0) { exepath_ = exepath_.SubString(0, cut) + "/Resources"; }
-        #endif
 
         class MyLog : public wxLog {
             void DoLogString(const wxChar *msg, time_t timestamp) { DoLogText(*msg); }

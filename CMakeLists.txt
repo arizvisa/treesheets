@@ -125,6 +125,16 @@ if(LINUX)
     OPTION(TREESHEETS_RELOCATABLE_INSTALLATION "Install data relative to the treesheets binary, instead of respecting the Filesystem Hierarchy Standard" OFF)
 endif()
 
+#if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+#set(prefix "${CMAKE_INSTALL_PREFIX}")
+#set(install_bin "bin")
+#set(install_shared_data "share/${CMAKE_PROJECT_NAME}")
+#set(install_shared_applications "share/applications")
+#endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+#configure_file("src/config.h.in" "config.h" @ONLY)
+#
+#file(GLOB sources src/*.cpp src/*.h
+
 if(LINUX AND NOT TREESHEETS_RELOCATABLE_INSTALLATION)
     include(GNUInstallDirs)
 
@@ -149,8 +159,8 @@ else()
 endif()
 
 #install(TARGETS treesheets DESTINATION bin)
-#install(DIRECTORY TS/ DESTINATION share/treesheets)
-#install(FILES treesheets.desktop DESTINATION share/applications)
+#install(DIRECTORY TS/ DESTINATION "${install_shared_data}")
+#install(FILES treesheets.desktop DESTINATION "${install_shared_applications}")
 install(TARGETS treesheets DESTINATION ${TREESHEETS_BINDIR})
 install(DIRECTORY TS/docs DESTINATION ${TREESHEETS_DOCDIR})
 install(FILES TS/readme.html DESTINATION ${TREESHEETS_DOCDIR})
