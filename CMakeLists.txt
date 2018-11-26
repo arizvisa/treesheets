@@ -38,6 +38,8 @@ set(install_bin "bin")
 set(install_shared_data "share/${CMAKE_PROJECT_NAME}")
 set(install_shared_applications "share/applications")
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 configure_file("src/config.h.in" "config.h" @ONLY)
 
 file(GLOB sources src/*.cpp src/*.h
