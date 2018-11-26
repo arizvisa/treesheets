@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Modified from https://commons.wikimedia.org/wiki/File:Orange_question.svg -->
-<!-- Build via inkscape -export-png=nuvola/dropdown/maybe.png -export-background-opacity=0 -without-gui nuvola-dropdown-maybe.svg -->
+<!-- Build via inkscape -export-png=nuvola/dropdown/maybe.png -export-area-page -export-background-opacity=0.0 -without-gui nuvola-dropdown-maybe.svg -->
 
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" version="1.1">
   <defs>
