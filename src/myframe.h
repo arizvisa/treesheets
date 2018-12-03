@@ -162,8 +162,13 @@ struct MyFrame : wxFrame {
         ScaleBitmap(foldicon, csf / 3.0, foldicon);
 
         if (sys->singletray)
+#ifndef __WXGTK__
             tbi.Connect(wxID_ANY, wxEVT_TASKBAR_LEFT_UP,
                         wxTaskBarIconEventHandler(MyFrame::OnTBIDBLClick), nullptr, this);
+#else
+            tbi.Connect(wxID_ANY, wxEVT_TASKBAR_LEFT_DOWN,
+                        wxTaskBarIconEventHandler(MyFrame::OnTBIDBLClick), nullptr, this);
+#endif
         else
             tbi.Connect(wxID_ANY, wxEVT_TASKBAR_LEFT_DCLICK,
                         wxTaskBarIconEventHandler(MyFrame::OnTBIDBLClick), nullptr, this);
@@ -1022,11 +1027,11 @@ struct MyFrame : wxFrame {
 
     void OnIconize(wxIconizeEvent &me) {
         if (me.IsIconized()) {
-            #ifdef WIN32
+            #if defined(WIN32) || defined(__WXGTK__)
             if (sys->totray) {
                 tbi.SetIcon(icon, L"TreeSheets");
                 Show(false);
-                Iconize();
+                Iconize(true);
             }
             #endif
         } else {
