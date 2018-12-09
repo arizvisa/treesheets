@@ -1035,7 +1035,7 @@ struct MyFrame : wxFrame {
             }
             #endif
         } else {
-            if (GetCurTab()) GetCurTab()->SetFocus();
+            ReFocus();
         }
     }
 
