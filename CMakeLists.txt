@@ -32,6 +32,16 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/TS)
 find_package(wxWidgets REQUIRED aui adv core xml net)
 include(${wxWidgets_USE_FILE})
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+set(prefix "${CMAKE_INSTALL_PREFIX}")
+set(install_bin "bin")
+set(install_shared_data "share/${CMAKE_PROJECT_NAME}")
+set(install_shared_applications "share/applications")
+endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+configure_file("src/config.h.in" "config.h" @ONLY)
+
 file(GLOB sources src/*.cpp src/*.h
         lobster/external/flatbuffers/src/*.cpp
         lobster/src/builtins.cpp
@@ -48,5 +58,6 @@ add_executable(treesheets ${sources})
 
 target_link_libraries(treesheets PRIVATE ${wxWidgets_LIBRARIES})
 
-install(TARGETS treesheets DESTINATION .)
-install(DIRECTORY TS/ DESTINATION .)
+install(TARGETS treesheets DESTINATION bin)
+install(FILES treesheets.desktop DESTINATION "${install_shared_applications}")
+install(DIRECTORY TS/ DESTINATION "${install_shared_data}")
