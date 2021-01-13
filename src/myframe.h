@@ -127,11 +127,29 @@ struct MyFrame : wxFrame {
                          _(L"Initialization Error"), wxOK, this);
             exit(1);
         }
-        #ifdef WIN32
+        #if defined(WIN32)
         int iconsmall = ::GetSystemMetrics(SM_CXSMICON);
         int iconlarge = ::GetSystemMetrics(SM_CXICON);
         icon.SetSize(iconsmall, iconsmall);  // this shouldn't be necessary...
         iconbig.SetSize(iconlarge, iconlarge);
+        #elif defined(__WXGTK__)
+        wxBitmap icon_bmp;
+        if (icon_bmp.CopyFromIcon(iconbig)) {
+            // Add the original small icon
+            wxIcon iconsmall(icon);
+            icons.AddIcon(iconsmall);
+
+            // Take the bitmap we made a copy of, make an image out of it, and then rescale it
+            wxImage icon_img;
+            icon_img = icon_bmp.ConvertToImage();
+            icon_img.Rescale(48, 48, wxIMAGE_QUALITY_HIGH);
+
+            // Now turn the image into a bitmap again
+            wxBitmap icon_bmp_large(icon_img);
+
+            // Overwrite the original icon with the rescaled image
+            icon.CopyFromBitmap(icon_bmp_large);
+        }
         #endif
         icons.AddIcon(icon);
         icons.AddIcon(iconbig);
@@ -145,7 +163,7 @@ struct MyFrame : wxFrame {
         ScaleBitmap(foldicon, csf / 3.0, foldicon);
 
         if (sys->singletray)
-            tbi.Connect(wxID_ANY, wxEVT_TASKBAR_LEFT_UP,
+            tbi.Connect(wxID_ANY, wxEVT_TASKBAR_CLICK,
                         wxTaskBarIconEventHandler(MyFrame::OnTBIDBLClick), nullptr, this);
         else
             tbi.Connect(wxID_ANY, wxEVT_TASKBAR_LEFT_DCLICK,
@@ -1006,26 +1024,36 @@ struct MyFrame : wxFrame {
     void OnActivate(wxActivateEvent &ae) {
         // This causes warnings in the debug log, but without it keyboard entry upon window select
         // doesn't work.
-        ReFocus();
+        if (ae.GetActive())
+            ReFocus();
     }
 
     void OnIconize(wxIconizeEvent &me) {
-        if (me.IsIconized()) {
+        if (sys->totray) {
             #ifndef __WXMAC__
-            if (sys->totray) {
+            if (me.IsIconized()) {
                 tbi.SetIcon(icon, L"TreeSheets");
                 Show(false);
                 Iconize();
+                return;
+
+            } else {
+                DeIconize();
+                return;
             }
             #endif
-        } else {
+
             #ifdef __WXGTK__
-            if (sys->totray) {
-                Show(true);
-            }
+            Show(true);
             #endif
-            if (GetCurTab()) GetCurTab()->SetFocus();
+
+            return;
         }
+
+        if (me.IsIconized())
+            Iconize();
+        else
+            Restore();
     }
 
     void DeIconize() {
@@ -1033,8 +1061,10 @@ struct MyFrame : wxFrame {
             RequestUserAttention();
             return;
         }
+
+        assert(sys->totray);
         Show(true);
-        Iconize(false);
+        Restore();
         tbi.RemoveIcon();
     }
 
