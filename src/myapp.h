@@ -18,7 +18,7 @@ struct MyApp : wxApp {
 
     void AddTranslation(const wxString &basepath) {
         #ifdef __WXGTK__
-            locale.AddCatalogLookupPathPrefix(wxString(PATH_SHARED_DATA) + "/translations");
+            locale.AddCatalogLookupPathPrefix(wxString(TREESHEETS_DATADIR) + "/translations");
             #ifdef LOCALEDIR
                 locale.AddCatalogLookupPathPrefix(LOCALEDIR);
             #endif
