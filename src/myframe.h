@@ -1138,8 +1138,8 @@ struct MyFrame : wxFrame {
                 }
                 nb->SetTabCtrlHeight(-1);
             }
-            idd->FillBitmapVector(imagepath);
         }
+        idd->FillBitmapVector(imagepath);
     }
 
     void OnIconize(wxIconizeEvent &me) {
