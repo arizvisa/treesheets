@@ -1,4 +1,4 @@
-#include "config.h"
+//#include "config.h"
 
 struct MyFrame : wxFrame {
     wxString exepath_;
