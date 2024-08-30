@@ -132,8 +132,6 @@ endif()
 #set(install_shared_applications "share/applications")
 #endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 #configure_file("src/config.h.in" "config.h" @ONLY)
-#
-#file(GLOB sources src/*.cpp src/*.h
 
 if(LINUX AND NOT TREESHEETS_RELOCATABLE_INSTALLATION)
     include(GNUInstallDirs)
