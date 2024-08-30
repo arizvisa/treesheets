@@ -91,7 +91,6 @@ struct MyFrame : wxFrame {
           app(_app),
           watcher(nullptr),
           watcherwaitingforuser(false),
-          csf(FromDIP(1.0)),
           zenmode(false) {
         sys->frame = this;
 

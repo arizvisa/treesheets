@@ -626,6 +626,7 @@ struct Document {
         if (dpichanged) {
             curdrawroot->ResetLayout();
             curdrawroot->ResetChildren();
+            scrolltoselection = true;
             dpichanged = false;
         }
         redrawpending = false;
