@@ -97,15 +97,32 @@ else()
         lobster-impl
     )
 endif()
+
+#if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+#set(prefix "${CMAKE_INSTALL_PREFIX}")
+#set(install_bin "bin")
+#set(install_shared_data "share/${CMAKE_PROJECT_NAME}")
+#set(install_shared_applications "share/applications")
+#endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+#
+#set(CMAKE_INCLUDE_CURRENT_DIR ON)
+#configure_file("src/config.h.in" "config.h" @ONLY)
+
 if(NOT APPLE AND NOT WIN32 AND NOT TREESHEETS_RELOCATABLE_INSTALLATION)
     set(TREESHEETS_BINDIR ${CMAKE_INSTALL_BINDIR})
-    set(TREESHEETS_DOCDIR ${CMAKE_INSTALL_DOCDIR})
+    #set(TREESHEETS_DOCDIR ${CMAKE_INSTALL_DOCDIR})
+    set(TREESHEETS_DOCDIR ${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME}/doc)
     set(TREESHEETS_FULL_DOCDIR ${CMAKE_INSTALL_FULL_DOCDIR})
     set(TREESHEETS_PKGDATADIR ${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME})
     set(TREESHEETS_FULL_PKGDATADIR ${CMAKE_INSTALL_FULL_DATADIR}/${CMAKE_PROJECT_NAME})
 
+    #set(TREESHEETS_LOCALEDIR ${CMAKE_INSTALL_LOCALEDIR})
+    set(TREESHEETS_LOCALEDIR ${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME}/translations)
+    set(TREESHEETS_FULL_LOCALEDIR ${CMAKE_INSTALL_FULL_DATADIR}/${CMAKE_PROJECT_NAME}/translations)
+
     # Apple and Windows always look to relative paths for locales.
-    target_compile_definitions(treesheets PRIVATE "LOCALEDIR=L\"${CMAKE_INSTALL_FULL_LOCALEDIR}\"")
+    #target_compile_definitions(treesheets PRIVATE "LOCALEDIR=L\"${CMAKE_INSTALL_FULL_LOCALEDIR}\"")
+    target_compile_definitions(treesheets PRIVATE "LOCALEDIR=L\"${TREESHEETS_FULL_LOCALEDIR}\"")
     target_compile_definitions(treesheets PRIVATE "TREESHEETS_DOCDIR=\"${TREESHEETS_FULL_DOCDIR}\"")
     target_compile_definitions(treesheets PRIVATE "TREESHEETS_DATADIR=\"${TREESHEETS_FULL_PKGDATADIR}\"")
 else()
@@ -114,7 +131,9 @@ else()
     set(TREESHEETS_PKGDATADIR ${CMAKE_INSTALL_PREFIX})
 endif()
 
+#install(TARGETS treesheets DESTINATION bin)
 install(TARGETS treesheets DESTINATION ${TREESHEETS_BINDIR})
+#install(DIRECTORY TS/ DESTINATION "${install_shared_data}")
 install(DIRECTORY TS/docs DESTINATION ${TREESHEETS_DOCDIR})
 install(FILES TS/readme.html DESTINATION ${TREESHEETS_DOCDIR})
 install(DIRECTORY TS/examples DESTINATION ${TREESHEETS_DOCDIR})
@@ -144,15 +163,20 @@ if(APPLE OR WIN32 OR TREESHEETS_RELOCATABLE_INSTALLATION)
 else()
     # Falling back to GNU scheme
     foreach(locale ${locales})
+        #install(
+        #    FILES "TS/translations/${locale}/ts.mo"
+        #    DESTINATION "${CMAKE_INSTALL_LOCALEDIR}/${locale}/LC_MESSAGES"
+        #)
         install(
             FILES "TS/translations/${locale}/ts.mo"
-            DESTINATION "${CMAKE_INSTALL_LOCALEDIR}/${locale}/LC_MESSAGES"
+            DESTINATION "${TREESHEETS_LOCALEDIR}/${locale}/LC_MESSAGES"
         )
     endforeach()
 endif()
 
 if(NOT APPLE AND NOT WIN32)
     install(FILES TS/images/treesheets.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
+    #install(FILES treesheets.desktop DESTINATION "${install_shared_applications}")
     install(FILES TS/treesheets.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
     install(FILES TS/treesheets.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages)
 endif()
