@@ -23,7 +23,6 @@ struct MyFrame : wxFrame {
     ColorDropdown *celldd = nullptr;
     ColorDropdown *textdd = nullptr;
     ColorDropdown *borddd = nullptr;
-    wxString imagepath;
     
     wxString GetDocPath(const wxString &relpath) {
         std::filesystem::path candidatePaths[] = {
@@ -95,6 +94,7 @@ struct MyFrame : wxFrame {
           csf(FromDIP(1.0)),
           zenmode(false) {
         sys->frame = this;
+
         exepath_ = wxFileName(exename).GetPath();
         #ifdef __WXMAC__
         int cut = exepath_.Find("/MacOS");
@@ -152,8 +152,6 @@ struct MyFrame : wxFrame {
         RenderFolderIcon();
         line_nw.LoadFile(GetDataPath(L"images/render/line_nw.png"), wxBITMAP_TYPE_PNG);
         line_sw.LoadFile(GetDataPath(L"images/render/line_sw.png"), wxBITMAP_TYPE_PNG);
-
-        imagepath = GetDataPath("images/nuvola/dropdown/");
 
         if (sys->singletray)
             tbi.Connect(wxID_ANY, wxEVT_TASKBAR_LEFT_UP,
@@ -698,6 +696,7 @@ struct MyFrame : wxFrame {
             tb->AddControl(borddd);
             tb->AddSeparator();
             tb->AddControl(new wxStaticText(tb, wxID_ANY, _(L"Image ")));
+            wxString imagepath = GetDataPath("images/nuvola/dropdown/");
             idd = new ImageDropdown(tb, imagepath);
             tb->AddControl(idd);
             tb->Realize();
