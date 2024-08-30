@@ -61,6 +61,7 @@ struct MyFrame : wxFrame {
         return wxString(relativePath.c_str());
     }
 
+#if 0
     wxString GetPath(const wxString &relpath) {
         #ifdef __WXGTK__
             return wxString(PATH_PREFIX) + "/" + wxString(PATH_SHARED_DATA) + "/" + relpath;
@@ -71,6 +72,7 @@ struct MyFrame : wxFrame {
         if (!exepath_.Length()) return relpath;
         return exepath_ + "/" + relpath;
     }
+#endif
 
     std::map<wxString, wxString> menustrings;
 
