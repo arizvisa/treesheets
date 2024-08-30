@@ -1,4 +1,4 @@
-#include "config.h"
+//#include "config.h"
 
 struct IPCServer : wxServer {
     wxConnectionBase *OnAcceptConnection(const wxString &topic) {
