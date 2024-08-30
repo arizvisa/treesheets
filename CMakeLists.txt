@@ -145,8 +145,13 @@ if(LINUX AND NOT TREESHEETS_RELOCATABLE_INSTALLATION)
     set(TREESHEETS_PKGDATADIR ${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME})
     set(TREESHEETS_FULL_PKGDATADIR ${CMAKE_INSTALL_FULL_DATADIR}/${CMAKE_PROJECT_NAME})
 
+    #set(TREESHEETS_LOCALEDIR ${CMAKE_INSTALL_LOCALEDIR})
+    set(TREESHEETS_LOCALEDIR ${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME}/translations)
+    set(TREESHEETS_FULL_LOCALEDIR ${CMAKE_INSTALL_FULL_DATADIR}/${CMAKE_PROJECT_NAME}/translations)
+
     # Convert relative to absolute paths because only absolute paths are looked up on Linux
-    target_compile_definitions(treesheets PRIVATE "LOCALEDIR=L\"${CMAKE_INSTALL_FULL_LOCALEDIR}\"")
+    #target_compile_definitions(treesheets PRIVATE "LOCALEDIR=L\"${CMAKE_INSTALL_FULL_LOCALEDIR}\"")
+    target_compile_definitions(treesheets PRIVATE "LOCALEDIR=L\"${TREESHEETS_FULL_LOCALEDIR}\"")
     target_compile_definitions(treesheets PRIVATE "TREESHEETS_DOCDIR=\"${TREESHEETS_FULL_DOCDIR}\"")
     target_compile_definitions(treesheets PRIVATE "TREESHEETS_DATADIR=\"${TREESHEETS_FULL_PKGDATADIR}\"")
 
@@ -199,9 +204,13 @@ elseif(APPLE)
 else()
     # Falling back to GNU scheme
     foreach(locale ${locales})
+        #install(
+        #    FILES "TS/translations/${locale}/ts.mo"
+        #    DESTINATION "${CMAKE_INSTALL_LOCALEDIR}/${locale}/LC_MESSAGES"
+        #)
         install(
             FILES "TS/translations/${locale}/ts.mo"
-            DESTINATION "${CMAKE_INSTALL_LOCALEDIR}/${locale}/LC_MESSAGES"
+            DESTINATION "${TREESHEETS_LOCALEDIR}/${locale}/LC_MESSAGES"
         )
     endforeach()
 endif()
