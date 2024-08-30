@@ -180,9 +180,12 @@ struct MyFrame : wxFrame {
         icons.AddIcon(iconbig);
         SetIcons(icons);
 
-        RenderFolderIcon();
+        wxImage foldiconi;
         line_nw.LoadFile(GetDataPath(L"images/render/line_nw.png"), wxBITMAP_TYPE_PNG);
         line_sw.LoadFile(GetDataPath(L"images/render/line_sw.png"), wxBITMAP_TYPE_PNG);
+        foldiconi.LoadFile(GetDataPath(L"images/nuvola/fold.png"));
+        foldicon = wxBitmap(foldiconi);
+        ScaleBitmap(foldicon, FromDIP(1.0) / 3.0, foldicon);
 
         if (sys->singletray)
             tbi.Connect(wxID_ANY, wxEVT_TASKBAR_LEFT_UP,
@@ -1136,13 +1139,6 @@ struct MyFrame : wxFrame {
         ReFocus();
     }
 
-    void RenderFolderIcon() {
-        wxImage foldiconi;
-        foldiconi.LoadFile(GetDataPath(L"images/nuvola/fold.png"));
-        foldicon = wxBitmap(foldiconi);
-        ScaleBitmap(foldicon, FromDIP(1.0) / 3.0, foldicon);
-    }
-
     void OnDPIChanged(wxDPIChangedEvent &dce) {
         {   // block all other events until we finished preparing
             wxEventBlocker blocker(this);
@@ -1157,7 +1153,10 @@ struct MyFrame : wxFrame {
                     }, sys->imagelist[i]);
                 }
             } // wait until all tasks are finished
-            RenderFolderIcon();
+            wxImage foldiconi;
+            foldiconi.LoadFile(GetDataPath(L"images/nuvola/fold.png"));
+            foldicon = wxBitmap(foldiconi);
+            ScaleBitmap(foldicon, FromDIP(1.0) / 3.0, foldicon);
             if (nb) {
                 loop(i, nb->GetPageCount()) {
                     TSCanvas *p = (TSCanvas *)nb->GetPage(i);
