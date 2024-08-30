@@ -1140,34 +1140,6 @@ struct MyFrame : wxFrame {
         foldiconi.LoadFile(GetDataPath(L"images/nuvola/fold.png"));
         foldicon = wxBitmap(foldiconi);
     }
-
-    void OnDPIChanged(wxDPIChangedEvent &dce) {
-        {   // block all other events until we finished preparing
-            wxEventBlocker blocker(this);
-            wxBusyCursor wait;
-            csf = FromDIP(1.0);
-            {
-                ThreadPool pool(std::thread::hardware_concurrency());   
-                loopv(i, sys->imagelist) {
-                    pool.enqueue([](Image *img) {
-                        img->bm_display = wxNullBitmap;
-                        img->Display();
-                    }, sys->imagelist[i]);
-                }
-            } // wait until all tasks are finished
-            RenderFolderIcon();
-            if (nb) {
-                loop(i, nb->GetPageCount()) {
-                    TSCanvas *p = (TSCanvas *)nb->GetPage(i);
-                    p->doc->dpichanged = true;
-                    p->doc->scrolltoselection = true;
-                }
-                nb->SetTabCtrlHeight(-1);
-            }
-        }
-        idd->FillBitmapVector(imagepath);
-    }
-
     void OnIconize(wxIconizeEvent &me) {
         if (me.IsIconized()) {
             #ifndef __WXMAC__

@@ -70,6 +70,7 @@ struct Document {
     bool redrawpending;
     bool scrolltoselection;
     bool dpichanged;
+    bool firstdraw;
 
     bool scaledviewingmode;
     double currentviewscale;
@@ -114,6 +115,7 @@ struct Document {
           redrawpending(false),
           scrolltoselection(true),
           dpichanged(false),
+          firstdraw(true),
           scaledviewingmode(false),
           currentviewscale(1),
           searchfilter(false),
@@ -623,12 +625,6 @@ struct Document {
     }
 
     void Draw(wxDC &dc) {
-        if (dpichanged) {
-            curdrawroot->ResetLayout();
-            curdrawroot->ResetChildren();
-            scrolltoselection = true;
-            dpichanged = false;
-        }
         redrawpending = false;
         dc.SetBackground(wxBrush(wxColor(Background())));
         dc.Clear();
