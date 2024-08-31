@@ -32,18 +32,8 @@ endif()
 
 set(CMAKE_CXX_STANDARD 17)
 
-OPTION(TREESHEETS_WITH_STATIC_WXWIDGETS "Build wxWidgets along with TreeSheets and link TreeSheets against static wxWidgets library" OFF)
-
-# If TREESHEETS_WITH_STATIC_WXWIDGETS is set, then it expects the wxWidgets source code
-# (recursive git check-out with submodules) to be placed in lib/wxWidgets (see below, it can be changed to your liking).
-
-if (TREESHEETS_WITH_STATIC_WXWIDGETS)
-    set(wxBUILD_SHARED OFF)
-    add_subdirectory(lib/wxWidgets)
-else()
-    find_package(wxWidgets REQUIRED aui adv core xml net)
-    include(${wxWidgets_USE_FILE})
-endif()
+find_package(wxWidgets REQUIRED aui adv core xml net)
+include(${wxWidgets_USE_FILE})
 
 file(
     GLOB lobster_sources
@@ -79,24 +69,12 @@ add_executable(
     src/main.cpp
 )
 
-if (TREESHEETS_WITH_STATIC_WXWIDGETS)
-    target_link_libraries(
-        treesheets
-        wx::aui
-        wx::adv
-        wx::core
-        wx::xml
-        wx::net
-        lobster-impl
-    )
-else()
-    target_link_libraries(
-        treesheets
-        PRIVATE
+target_link_libraries(
+    treesheets
+    PRIVATE
         ${wxWidgets_LIBRARIES}
         lobster-impl
-    )
-endif()
+)
 
 #if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 #set(prefix "${CMAKE_INSTALL_PREFIX}")
