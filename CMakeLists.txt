@@ -111,17 +111,38 @@ if(APPLE)
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/osx/Info.plist"
     )
 else()
+    #add_executable(
+    #    TreeSheets
+    #    src/main.cpp
+    #)
     add_executable(
-        TreeSheets
+        treesheets
         src/main.cpp
     )
 endif()
 
-target_include_directories(TreeSheets PUBLIC lobster/src)
-target_precompile_headers(TreeSheets PUBLIC src/stdafx.h)
+#target_include_directories(TreeSheets PUBLIC lobster/src)
+#target_precompile_headers(TreeSheets PUBLIC src/stdafx.h)
+#
+#target_link_libraries(
+#    TreeSheets
+#    PRIVATE
+#    $<IF:$<BOOL:${TREESHEETS_WITH_STATIC_WXWIDGETS}>,
+#        wx::aui
+#        wx::adv
+#        wx::core
+#        wx::xml
+#        wx::net,
+#        ${wxWidgets_LIBRARIES}
+#    >
+#    lobster-impl
+#)
+
+target_include_directories(treesheets PUBLIC lobster/src)
+target_precompile_headers(treesheets PUBLIC src/stdafx.h)
 
 target_link_libraries(
-    TreeSheets
+    treesheets
     PRIVATE
     $<IF:$<BOOL:${TREESHEETS_WITH_STATIC_WXWIDGETS}>,
         wx::aui
@@ -140,19 +161,37 @@ if(LINUX)
     OPTION(TREESHEETS_RELOCATABLE_INSTALLATION "Install data relative to the TreeSheets binary, instead of respecting the Filesystem Hierarchy Standard" OFF)
 endif()
 
+#if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+#set(prefix "${CMAKE_INSTALL_PREFIX}")
+#set(install_bin "bin")
+#set(install_shared_data "share/${CMAKE_PROJECT_NAME}")
+#set(install_shared_applications "share/applications")
+#endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+#
+#set(CMAKE_INCLUDE_CURRENT_DIR ON)
+#configure_file("src/config.h.in" "config.h" @ONLY)
+
 if(LINUX AND NOT TREESHEETS_RELOCATABLE_INSTALLATION)
     include(GNUInstallDirs)
 
     set(TREESHEETS_BINDIR ${CMAKE_INSTALL_BINDIR})
-    set(TREESHEETS_DOCDIR ${CMAKE_INSTALL_DOCDIR})
+    #set(TREESHEETS_DOCDIR ${CMAKE_INSTALL_DOCDIR})
+    set(TREESHEETS_DOCDIR ${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME}/doc)
     set(TREESHEETS_FULL_DOCDIR ${CMAKE_INSTALL_FULL_DOCDIR})
     set(TREESHEETS_PKGDATADIR ${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME})
     set(TREESHEETS_FULL_PKGDATADIR ${CMAKE_INSTALL_FULL_DATADIR}/${CMAKE_PROJECT_NAME})
 
+    #set(TREESHEETS_LOCALEDIR ${CMAKE_INSTALL_LOCALEDIR})
+    set(TREESHEETS_LOCALEDIR ${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME}/translations)
+    set(TREESHEETS_FULL_LOCALEDIR ${CMAKE_INSTALL_FULL_DATADIR}/${CMAKE_PROJECT_NAME}/translations)
+
     # Convert relative to absolute paths because only absolute paths are looked up on Linux
-    target_compile_definitions(TreeSheets PRIVATE "LOCALEDIR=L\"${CMAKE_INSTALL_FULL_LOCALEDIR}\"")
-    target_compile_definitions(TreeSheets PRIVATE "TREESHEETS_DOCDIR=\"${TREESHEETS_FULL_DOCDIR}\"")
-    target_compile_definitions(TreeSheets PRIVATE "TREESHEETS_DATADIR=\"${TREESHEETS_FULL_PKGDATADIR}\"")
+    #target_compile_definitions(TreeSheets PRIVATE "LOCALEDIR=L\"${CMAKE_INSTALL_FULL_LOCALEDIR}\"")
+    #target_compile_definitions(TreeSheets PRIVATE "TREESHEETS_DOCDIR=\"${TREESHEETS_FULL_DOCDIR}\"")
+    #target_compile_definitions(TreeSheets PRIVATE "TREESHEETS_DATADIR=\"${TREESHEETS_FULL_PKGDATADIR}\"")
+    target_compile_definitions(treesheets PRIVATE "LOCALEDIR=L\"${TREESHEETS_FULL_LOCALEDIR}\"")
+    target_compile_definitions(treesheets PRIVATE "TREESHEETS_DOCDIR=\"${TREESHEETS_FULL_DOCDIR}\"")
+    target_compile_definitions(treesheets PRIVATE "TREESHEETS_DATADIR=\"${TREESHEETS_FULL_PKGDATADIR}\"")
 
     install(FILES linux/com.strlen.TreeSheets.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
     install(FILES linux/com.strlen.TreeSheets.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
@@ -167,7 +206,10 @@ else()
     set(TREESHEETS_PKGDATADIR ${CMAKE_INSTALL_PREFIX})
 endif()
 
-install(TARGETS TreeSheets DESTINATION ${TREESHEETS_BINDIR})
+#install(TARGETS TreeSheets DESTINATION ${TREESHEETS_BINDIR})
+#install(DIRECTORY TS/ DESTINATION "${install_shared_data}")
+#install(FILES treesheets.desktop DESTINATION "${install_shared_applications}")
+install(TARGETS treesheets DESTINATION ${TREESHEETS_BINDIR})
 install(DIRECTORY TS/docs DESTINATION ${TREESHEETS_DOCDIR})
 install(FILES TS/readme.html DESTINATION ${TREESHEETS_DOCDIR})
 install(DIRECTORY TS/examples DESTINATION ${TREESHEETS_DOCDIR})
@@ -204,9 +246,13 @@ elseif(APPLE)
 else()
     # Falling back to GNU scheme
     foreach(locale ${locales})
+        #install(
+        #    FILES "TS/translations/${locale}/ts.mo"
+        #    DESTINATION "${CMAKE_INSTALL_LOCALEDIR}/${locale}/LC_MESSAGES"
+        #)
         install(
             FILES "TS/translations/${locale}/ts.mo"
-            DESTINATION "${CMAKE_INSTALL_LOCALEDIR}/${locale}/LC_MESSAGES"
+            DESTINATION "${TREESHEETS_LOCALEDIR}/${locale}/LC_MESSAGES"
         )
     endforeach()
 endif()
